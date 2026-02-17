@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Pro Definitiva: Filtro Cambio de Uso | Cataluña</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans p-4 md:p-8">
+
+    <div id="informePDF" class="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow-xl">
+        
+        <header class="border-b pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-800">Estudio de Viabilidad: Local a Vivienda</h1>
+                <p class="text-gray-500 mt-2">Análisis Urbanístico, Técnico y Financiero (Cataluña)</p>
+            </div>
+            <button onclick="exportarPDF()" data-html2canvas-ignore class="mt-4 md:mt-0 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded shadow-md transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                Exportar Informe a PDF
+            </button>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="space-y-6">
+                
+                <section class="bg-blue-50 p-5 rounded-lg border border-blue-100 shadow-sm">
+                    <h2 class="text-xl font-bold mb-3 text-blue-900">1. Localización y Planeamiento</h2>
+                    <div class="flex flex-col gap-3">
+                        <select id="municipioSelect" onchange="actualizarReglasMunicipio()" class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 bg-white font-semibold">
+                            <option value="general" selected>Resto de municipios (Norma General)</option>
+                            <option value="barcelona">Barcelona (PIU)</option>
+                            <option value="lhospitalet">L'Hospitalet de Llobregat</option>
+                            <option value="terrassa">Terrassa</option>
+                            <option value="sabadell">Sabadell</option>
+                            <option value="mataro">Mataró</option>
+                        </select>
+                        <button onclick="abrirVisor()" data-html2canvas-ignore class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors shadow-md">
+                            Abrir Visor Urbanístico
+                        </button>
+                    </div>
+
+                    <div id="avisosMunicipio" class="mt-4 space-y-2 hidden">
+                        <div id="avisoParking" class="text-sm bg-indigo-100 text-indigo-800 p-2 rounded border border-indigo-200"></div>
+                        <div id="avisoHumos" class="text-sm bg-teal-100 text-teal-800 p-2 rounded border border-teal-200"></div>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-t border-blue-200">
+                        <h3 class="text-sm font-bold text-blue-900 mb-2">Decodificador de Zona (PGM):</h3>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" id="claveUrbana" class="flex-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 uppercase font-mono bg-white" placeholder="Ej: 12, 13, 22a...">
+                            <button onclick="comprobarClave()" data-html2canvas-ignore class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded shadow-md transition-colors">Verificar Uso</button>
+                        </div>
+                        <div id="resultadoClave" class="mt-3 text-sm hidden p-3 rounded border-2"></div>
+                    </div>
+                </section>
+
+                <section class="bg-emerald-50 p-5 rounded-lg border border-emerald-100 shadow-sm">
+                    <h2 class="text-xl font-bold mb-2 text-emerald-900">2. Análisis de Densidad</h2>
+                    <a href="https://www1.sedecatastro.gob.es/Cartografia/mapa.aspx" target="_blank" data-html2canvas-ignore class="block text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mb-4 shadow-md transition-colors mt-2">🔍 Abrir Catastro</a>
+                    <div class="space-y-4 bg-white p-4 rounded-lg border border-emerald-200">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-700">Parcela (m²):</label>
+                                <input type="number" id="superficieParcela" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-700">Índice (m²/viv):</label>
+                                <input type="number" id="indiceDensidad" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold text-gray-700">Viviendas existentes:</label>
+                            <input type="number" id="viviendasExistentes" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <button onclick="calcularDensidad()" data-html2canvas-ignore class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded shadow-md transition-colors">Calcular Densidad</button>
+                        <div id="resultadoDensidad" class="mt-4 text-center font-bold text-lg hidden border-2 p-3 rounded"></div>
+                    </div>
+                </section>
+
+                <section class="bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-sm">
+                    <h2 class="text-xl font-bold mb-3 text-gray-800">3. Análisis Técnico (Cálculo S/9)</h2>
+                    
+                    <div class="space-y-4 bg-white p-4 rounded-lg border border-gray-300">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label id="labelSupMinima" class="text-sm font-semibold text-gray-700">Superficie útil (m²):</label>
+                                <input type="number" id="checkSuperficie" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 45">
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-700">Longitud Fachada (m):</label>
+                                <input type="number" id="checkFachada" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 5.5">
+                            </div>
+                        </div>
+
+                        <div id="panelTecnico" class="hidden space-y-2 p-3 rounded bg-gray-50 border">
+                            <div id="resSuperficie" class="text-sm font-medium"></div>
+                            <div id="resFachada" class="text-sm font-medium"></div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2 border-t">
+                            <span class="text-sm font-medium text-gray-700">Estatutos SIN prohibición:</span>
+                            <select class="p-1 border rounded text-sm bg-gray-50"><option>Pendiente</option><option>Sí</option><option>No</option></select>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-700">Salida Humos (Física o Carbono):</span>
+                            <select class="p-1 border rounded text-sm bg-gray-50"><option>Pendiente</option><option>A Cubierta</option><option>Filtro Carbono</option><option>No viable</option></select>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="space-y-6">
+                <section class="bg-amber-50 p-5 rounded-lg border border-amber-100 shadow-sm h-full flex flex-col">
+                    <h2 class="text-xl font-bold mb-3 text-amber-900">4. Viabilidad Económica (ROI)</h2>
+                    
+                    <div class="space-y-4 flex-grow bg-white p-4 rounded-lg border border-amber-200">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-700">Precio Compra (€):</label>
+                                <input type="number" id="precioCompra" class="w-full p-2 border border-gray-300 rounded mt-1">
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-700">Superficie Local (m²):</label>
+                                <input type="number" id="m2Local" class="w-full p-2 border border-gray-300 rounded mt-1">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-semibold text-gray-700">Coste Reforma (€/m²):</label>
+                                <input type="number" id="costeReformaM2" class="w-full p-2 border border-gray-300 rounded mt-1" value="1000">
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-gray-700">Precio Venta (€):</label>
+                                <input type="number" id="precioVenta" class="w-full p-2 border border-gray-300 rounded mt-1">
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-3 rounded border border-gray-200 mt-4" id="cajaExtras">
+                            <h3 class="text-sm font-bold text-gray-700 mb-2">Costes Ocultos y Extras:</h3>
+                            <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                                <input type="checkbox" id="riesgoRadon" class="rounded text-amber-600 w-4 h-4">
+                                <span class="font-medium text-gray-700">Radón / Acústica (+150€/m²)</span>
+                            </label>
+                            <label class="flex items-center space-x-2 text-sm mt-3 cursor-pointer" id="labelCascoAntiguo">
+                                <input type="checkbox" id="extraCascoAntiguo" class="rounded text-amber-600 w-4 h-4">
+                                <span class="font-medium text-gray-700">Logística Casco Antiguo (+15% reforma)</span>
+                            </label>
+                            <label class="flex items-center space-x-2 text-sm mt-3 cursor-pointer">
+                                <input type="checkbox" id="tasaParking" class="rounded text-amber-600 w-4 h-4">
+                                <span class="font-medium text-gray-700">Tasa compensatoria Parking (+10.000€)</span>
+                            </label>
+                        </div>
+
+                        <button onclick="calcularROI()" data-html2canvas-ignore class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded shadow-md mt-6">📊 Calcular Rentabilidad</button>
+
+                        <div id="panelResultados" class="hidden mt-6 bg-slate-50 p-5 rounded-lg border-2 border-slate-800 shadow-inner">
+                            <h3 class="text-lg font-bold text-center mb-4 text-slate-800 border-b pb-2">Resultados Financieros</h3>
+                            <div class="space-y-3">
+                                <div class="flex justify-between items-center"><span class="text-gray-700 font-medium">Inversión Total:</span><span id="outInversion" class="font-bold text-red-600 text-lg">0 €</span></div>
+                                <div class="flex justify-between items-center"><span class="text-gray-700 font-medium">Beneficio Neto:</span><span id="outBeneficio" class="font-bold text-green-600 text-lg">0 €</span></div>
+                                <div class="flex justify-between items-center bg-white p-3 rounded border border-gray-200 mt-2"><span class="text-gray-900 font-bold text-xl">ROI Estimado:</span><span id="outROI" class="font-black text-2xl">0 %</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN DE MUNICIPIOS (El "Cerebro")
+        const normasMunicipios = {
+            "barcelona": { 
+                visor: "https://ajuntament.barcelona.cat/informaciourbanistica/cerca/es/",
+                supMinima: 40,
+                permiteCarbono: false,
+                avisoHumos: "🔴 Humos: BCN exige extracción a cubierta casi sin excepciones para legalizar.",
+                avisoParking: "ℹ️ Parking: Sujeto a densidad y exenciones del PGM según tamaño y zona."
+            },
+            "mataro": {
+                visor: "https://www.mataro.cat/es/temas/urbanismo/planificacion-urbanistica/planeamiento-urbanistico-vigente/planeamiento-urbanistico-vigente",
+                supMinima: 36,
+                permiteCarbono: false,
+                avisoHumos: "🔴 Humos: Suele requerir extracción a cubierta.",
+                avisoParking: "⚠️ PARKING: Exige vincular plaza registral en la misma finca o radio cercano. Consulta posibles exenciones (pagos compensatorios)."
+            },
+            "sabadell": {
+                visor: "https://visors.sabadell.cat/VisorUrbanistic/",
+                supMinima: 36,
+                permiteCarbono: true, // Ejemplo (modificable según ordenanza actual)
+                avisoHumos: "🟢 Humos: Históricamente han admitido campanas de carbono para cambios de uso sin tiro natural. Confirmar con OAC.",
+                avisoParking: "ℹ️ Parking: Revisar ordenanza de movilidad para cambios de uso."
+            },
+            "terrassa": {
+                visor: "https://aoberta.terrassa.cat/urbanisme/mapa/",
+                supMinima: 36,
+                permiteCarbono: true,
+                avisoHumos: "🟢 Humos: Algunos técnicos municipales aceptan filtros de carbono justificados.",
+                avisoParking: "ℹ️ Parking: Requiere justificación según POUM."
+            },
+            "lhospitalet": {
+                visor: "https://lhgeoportal.l-h.cat/",
+                supMinima: 36,
+                permiteCarbono: false,
+                avisoHumos: "🔴 Humos: Muy restrictivos, exigen chimenea a cubierta.",
+                avisoParking: "ℹ️ Parking: Se rige por el PGM, revisar densidad."
+            },
+            "general": {
+                visor: "https://dtes.gencat.cat/muc-visor/",
+                supMinima: 36,
+                permiteCarbono: false,
+                avisoHumos: "ℹ️ Humos: Por defecto el CTE exige salida a cubierta. Consulta si este ayuntamiento admite filtros de carbono.",
+                avisoParking: "ℹ️ Parking: Consulta el POUM local."
+            }
+        };
+
+        let supMinimaActual = 36; // Variable global
+
+        // 1. ACTUALIZAR REGLAS AL CAMBIAR MUNICIPIO
+        function actualizarReglasMunicipio() {
+            const mun = document.getElementById('municipioSelect').value;
+            const reglas = normasMunicipios[mun];
+            
+            // Actualizar variables y textos
+            supMinimaActual = reglas.supMinima;
+            document.getElementById('labelSupMinima').innerText = `Superficie útil req. (≥${supMinimaActual}m²):`;
+            
+            // Mostrar avisos
+            const cajaAvisos = document.getElementById('avisosMunicipio');
+            document.getElementById('avisoParking').innerText = reglas.avisoParking;
+            document.getElementById('avisoHumos').innerText = reglas.avisoHumos;
+            cajaAvisos.classList.remove('hidden');
+
+            // Re-evaluar matemáticas si ya había datos escritos
+            evaluarTecnico();
+        }
+
+        function abrirVisor() {
+            const mun = document.getElementById('municipioSelect').value;
+            window.open(normasMunicipios[mun].visor, '_blank');
+        }
+
+        // 2. MATEMÁTICAS: DECRETO DE HABITABILIDAD (Superficie y S/9)
+        function evaluarTecnico() {
+            const sup = parseFloat(document.getElementById('checkSuperficie').value);
+            const fac = parseFloat(document.getElementById('checkFachada').value);
+            const panel = document.getElementById('panelTecnico');
+            const resSup = document.getElementById('resSuperficie');
+            const resFac = document.getElementById('resFachada');
+
+            if(!sup && !fac) { panel.classList.add('hidden'); return; }
+            panel.classList.remove('hidden');
+
+            // Evaluar Superficie
+            if (sup) {
+                if (sup >= supMinimaActual) {
+                    resSup.innerHTML = `✅ <strong>Superficie:</strong> Cumple (≥ ${supMinimaActual}m²).`;
+                    resSup.className = "text-sm text-green-700";
+                    // Rellenar automáticamente la económica
+                    document.getElementById('m2Local').value = sup;
+                } else {
+                    resSup.innerHTML = `❌ <strong>Superficie:</strong> NO cumple (Requiere ${supMinimaActual}m²).`;
+                    resSup.className = "text-sm text-red-600 font-bold";
+                }
+            }
+
+            // Evaluar Fachada (L >= S/9)
+            if (sup && fac) {
+                const reqFachada = sup / 9;
+                if (fac >= reqFachada) {
+                    resFac.innerHTML = `✅ <strong>Fachada:</strong> Cumple fórmula S/9 (Mínimo requerido: ${reqFachada.toFixed(2)}m).`;
+                    resFac.className = "text-sm text-green-700 mt-1";
+                } else {
+                    resFac.innerHTML = `❌ <strong>Fachada:</strong> Insuficiente. Según tus m², necesitas mínimo ${reqFachada.toFixed(2)}m (S/9).`;
+                    resFac.className = "text-sm text-red-600 font-bold mt-1";
+                }
+            }
+        }
+
+        // 3. DECODIFICADOR PGM (Mantiene la función anterior)
+        const diccionarioZonas = {
+            "12": { nombre: "Casco Antiguo", vivienda: true, nota: "Se activó +15% de coste por logística en calculadora." },
+            "13": { nombre: "Densificación Urbana", vivienda: true, nota: "Verifica densidad en catastro." },
+            "14": { nombre: "Ensanche", vivienda: true, nota: "Sujeto a ventilación patio manzana." },
+            "22A": { nombre: "Industrial", vivienda: false, nota: "Residencial PROHIBIDO." },
+            "22@": { nombre: "22@", vivienda: false, nota: "Residencial PROHIBIDO." }
+        };
+
+        function comprobarClave() {
+            const input = document.getElementById('claveUrbana').value.toUpperCase().trim();
+            const divRes = document.getElementById('resultadoClave');
+            const checkCasco = document.getElementById('extraCascoAntiguo');
+            
+            if (!input) return;
+            divRes.className = "mt-3 text-sm p-3 rounded border-2"; divRes.classList.remove('hidden');
+
+            let baseKey = Object.keys(diccionarioZonas).find(k => input.startsWith(k));
+            let data = baseKey ? diccionarioZonas[baseKey] : null;
+
+            if (baseKey === "12") { checkCasco.checked = true; } else { checkCasco.checked = false; }
+
+            if (data) {
+                divRes.innerHTML = `<strong>Zona ${input} - ${data.nombre}</strong><br>${data.vivienda ? '✅ PERMITIDO' : '❌ PROHIBIDO'}.<br><span class="text-xs">${data.nota}</span>`;
+                divRes.classList.add(data.vivienda ? 'bg-green-50' : 'bg-red-50', data.vivienda ? 'border-green-400' : 'border-red-400', data.vivienda ? 'text-green-900' : 'text-red-900');
+            } else {
+                divRes.innerHTML = `⚠️ <strong>Clave no registrada.</strong> Consulta planeamiento.`;
+                divRes.classList.add('bg-yellow-50', 'border-yellow-400', 'text-yellow-900');
+            }
+        }
+
+        // 4. DENSIDAD
+        function calcularDensidad() {
+            const p = parseFloat(document.getElementById('superficieParcela').value);
+            const i = parseFloat(document.getElementById('indiceDensidad').value);
+            const e = parseInt(document.getElementById('viviendasExistentes').value);
+            const divRes = document.getElementById('resultadoDensidad');
+
+            if (!p || !i || isNaN(e)) return;
+            const max = Math.floor(p / i); const disp = max - e;
+            divRes.className = "mt-4 text-center font-bold text-lg border-2 p-3 rounded"; divRes.classList.remove('hidden');
+
+            if (disp > 0) {
+                divRes.innerHTML = `✅ ¡VIABLE! <br> Caben <span class="text-2xl">${disp}</span> vivienda(s) más.`;
+                divRes.classList.add('text-green-700', 'bg-green-50', 'border-green-400');
+            } else {
+                divRes.innerHTML = `❌ INVIABLE. Densidad agotada.`;
+                divRes.classList.add('text-red-700', 'bg-red-50', 'border-red-400');
+            }
+        }
+
+        // 5. ROI
+        function calcularROI() {
+            const compra = parseFloat(document.getElementById('precioCompra').value) || 0;
+            const m2 = parseFloat(document.getElementById('m2Local').value) || 0;
+            const costeM2Base = parseFloat(document.getElementById('costeReformaM2').value) || 0;
+            const venta = parseFloat(document.getElementById('precioVenta').value) || 0;
+
+            if (compra === 0 || m2 === 0 || venta === 0) { alert("Completa los datos de Compra, Superficie y Venta."); return; }
+
+            const costeRefBase = m2 * costeM2Base;
+            const extraRadon = document.getElementById('riesgoRadon').checked ? (150 * m2) : 0;
+            const extraCasco = document.getElementById('extraCascoAntiguo').checked ? (costeRefBase * 0.15) : 0;
+            const tasaParking = document.getElementById('tasaParking').checked ? 10000 : 0;
+
+            const invTotal = compra + (compra * 0.10) + (costeRefBase + extraRadon + extraCasco) * 1.06 + tasaParking;
+            const beneficio = venta - invTotal;
+            const roi = invTotal > 0 ? (beneficio / invTotal) * 100 : 0;
+
+            document.getElementById('panelResultados').classList.remove('hidden');
+            const fmt = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+            document.getElementById('outInversion').innerText = fmt.format(invTotal);
+            document.getElementById('outBeneficio').innerText = fmt.format(beneficio);
+            
+            const rSpan = document.getElementById('outROI');
+            rSpan.innerText = roi.toFixed(1) + ' %';
+            rSpan.className = roi >= 15 ? 'font-black text-2xl text-green-600' : (roi >= 0 ? 'font-black text-2xl text-amber-500' : 'font-black text-2xl text-red-600');
+        }
+
+        // 6. EXPORTAR PDF
+        function exportarPDF() {
+            if(document.getElementById('precioCompra').value) calcularROI();
+            const el = document.getElementById('informePDF');
+            html2pdf().set({ margin: 10, filename: 'Estudio_Viabilidad.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from(el).save();
+        }
+
+        // Iniciar con las reglas de "General"
+        window.onload = actualizarReglasMunicipio;
+    </script>
+</body>
+</html>
