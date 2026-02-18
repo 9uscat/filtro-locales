@@ -3,33 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Pro Definitiva: Filtro Cambio de Uso | Cataluña</title>
+    <title>Evaluador 9US | Cambio de Uso</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans p-4 md:p-8">
+<body class="bg-slate-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
-    <div id="informePDF" class="max-w-6xl mx-auto bg-white p-6 md:p-8 rounded-lg shadow-xl">
-        
-        <header class="border-b pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div>
-                <h1 class="text-3xl font-bold text-slate-800">Estudio de Viabilidad: Local a Vivienda</h1>
-                <p class="text-gray-500 mt-2">Análisis Urbanístico, Técnico y Financiero (Cataluña)</p>
-            </div>
-            <button onclick="exportarPDF()" data-html2canvas-ignore class="mt-4 md:mt-0 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded shadow-md transition-colors flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                Exportar Informe a PDF
-            </button>
-        </header>
+    <nav class="bg-white shadow-sm border-b p-4">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black text-slate-800 tracking-tighter hover:text-blue-600 transition">
+                9<span class="text-blue-600">US</span>
+            </a>
+            <span class="text-sm font-bold text-gray-400 uppercase tracking-widest hidden sm:block">Auditoría de Viabilidad</span>
+        </div>
+    </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="flex-grow p-4 md:p-8 flex items-center justify-center">
+        <div id="informePDF" class="w-full max-w-4xl bg-white p-6 md:p-10 rounded-2xl shadow-xl border border-gray-100">
             
-            <div class="space-y-6">
+            <div class="mb-8" data-html2canvas-ignore>
+                <div class="flex justify-between mb-2">
+                    <span id="progText1" class="text-xs font-bold text-blue-600 uppercase">1. Urbanismo</span>
+                    <span id="progText2" class="text-xs font-bold text-gray-400 uppercase">2. Técnica</span>
+                    <span id="progText3" class="text-xs font-bold text-gray-400 uppercase">3. Financiera</span>
+                    <span id="progText4" class="text-xs font-bold text-gray-400 uppercase">4. Resultado</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 25%"></div>
+                </div>
+            </div>
+
+            <div id="paso1" class="paso-bloque block">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">Fase 1: Viabilidad Urbanística</h2>
                 
-                <section class="bg-blue-50 p-5 rounded-lg border border-blue-100 shadow-sm">
-                    <h2 class="text-xl font-bold mb-3 text-blue-900">1. Localización y Planeamiento</h2>
-                    <div class="flex flex-col gap-3">
-                        <select id="municipioSelect" onchange="actualizarReglasMunicipio()" class="p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 bg-white font-semibold">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <label class="block text-sm font-bold text-gray-700">Municipio de la inversión:</label>
+                        <select id="municipioSelect" onchange="actualizarReglasMunicipio()" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 bg-slate-50">
                             <option value="general" selected>Resto de municipios (Norma General)</option>
                             <option value="barcelona">Barcelona (PIU)</option>
                             <option value="lhospitalet">L'Hospitalet de Llobregat</option>
@@ -37,349 +47,332 @@
                             <option value="sabadell">Sabadell</option>
                             <option value="mataro">Mataró</option>
                         </select>
-                        <button onclick="abrirVisor()" data-html2canvas-ignore class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors shadow-md">
-                            Abrir Visor Urbanístico
-                        </button>
-                    </div>
-
-                    <div id="avisosMunicipio" class="mt-4 space-y-2 hidden">
-                        <div id="avisoParking" class="text-sm bg-indigo-100 text-indigo-800 p-2 rounded border border-indigo-200"></div>
-                        <div id="avisoHumos" class="text-sm bg-teal-100 text-teal-800 p-2 rounded border border-teal-200"></div>
-                    </div>
-
-                    <div class="mt-5 pt-4 border-t border-blue-200">
-                        <h3 class="text-sm font-bold text-blue-900 mb-2">Decodificador de Zona (PGM):</h3>
-                        <div class="flex flex-col sm:flex-row gap-2">
-                            <input type="text" id="claveUrbana" class="flex-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 uppercase font-mono bg-white" placeholder="Ej: 12, 13, 22a...">
-                            <button onclick="comprobarClave()" data-html2canvas-ignore class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded shadow-md transition-colors">Verificar Uso</button>
+                        <button onclick="abrirVisor()" class="w-full bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold py-2 rounded-lg transition">🔍 Abrir Visor Oficial</button>
+                        
+                        <div id="avisosMunicipio" class="space-y-2 mt-4 text-xs p-3 bg-gray-50 rounded-lg border hidden">
+                            <div id="avisoParking" class="text-indigo-700"></div>
+                            <div id="avisoHumos" class="text-teal-700 mt-2"></div>
                         </div>
-                        <div id="resultadoClave" class="mt-3 text-sm hidden p-3 rounded border-2"></div>
-                    </div>
-                </section>
 
-                <section class="bg-emerald-50 p-5 rounded-lg border border-emerald-100 shadow-sm">
-                    <h2 class="text-xl font-bold mb-2 text-emerald-900">2. Análisis de Densidad</h2>
-                    <a href="https://www1.sedecatastro.gob.es/Cartografia/mapa.aspx" target="_blank" data-html2canvas-ignore class="block text-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mb-4 shadow-md transition-colors mt-2">🔍 Abrir Catastro</a>
-                    <div class="space-y-4 bg-white p-4 rounded-lg border border-emerald-200">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-700">Parcela (m²):</label>
-                                <input type="number" id="superficieParcela" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-emerald-500">
+                        <div class="pt-4 border-t border-gray-200">
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Decodificador PGM (Opcional):</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="claveUrbana" class="w-full p-2 border border-gray-300 rounded-lg bg-white uppercase text-sm" placeholder="Ej: 12, 13, 22a...">
+                                <button onclick="comprobarClave()" class="bg-blue-800 hover:bg-blue-900 text-white font-bold px-4 rounded-lg text-sm">Validar</button>
                             </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-700">Índice (m²/viv):</label>
-                                <input type="number" id="indiceDensidad" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-emerald-500">
-                            </div>
+                            <div id="resultadoClave" class="mt-2 text-xs hidden p-2 rounded border"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 bg-emerald-50 p-5 rounded-xl border border-emerald-100">
+                        <h3 class="font-bold text-emerald-900">Análisis de Densidad (Catastro)</h3>
+                        <a href="https://www1.sedecatastro.gob.es/Cartografia/mapa.aspx" target="_blank" class="block text-center text-sm text-emerald-700 font-bold underline mb-2">Abrir buscador Catastro ➔</a>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label class="text-xs font-semibold">Parcela (m²):</label><input type="number" id="superficieParcela" class="w-full p-2 border rounded mt-1"></div>
+                            <div><label class="text-xs font-semibold">Índice (m²/viv):</label><input type="number" id="indiceDensidad" class="w-full p-2 border rounded mt-1"></div>
+                        </div>
+                        <div><label class="text-xs font-semibold">Viviendas existentes:</label><input type="number" id="viviendasExistentes" class="w-full p-2 border rounded mt-1"></div>
+                        <button onclick="calcularDensidad()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg">Verificar Densidad</button>
+                        <div id="resultadoDensidad" class="mt-2 text-center font-bold text-sm hidden p-2 rounded"></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button onclick="irPaso2()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg">Siguiente Paso ➔</button>
+                </div>
+            </div>
+
+            <div id="paso2" class="paso-bloque hidden">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">Fase 2: Auditoría Técnica (Habitabilidad)</h2>
+                
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 flex items-center justify-between">
+                        <label class="font-bold text-blue-900">¿Cuántas viviendas vas a sacar? (Segregación)</label>
+                        <input type="number" id="numViviendasPlan" value="1" min="1" oninput="evaluarTecnico()" class="w-20 p-2 border rounded-lg text-center font-bold text-blue-900 text-lg">
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label id="labelSupMinima" class="text-sm font-bold text-gray-700">Sup. útil TOTAL (m²):</label>
+                            <input type="number" id="checkSuperficie" oninput="evaluarTecnico()" class="w-full p-3 border rounded-lg mt-1 bg-slate-50">
+                            <div id="resSuperficie" class="text-xs font-medium mt-1 h-4"></div>
                         </div>
                         <div>
-                            <label class="text-sm font-semibold text-gray-700">Viviendas existentes:</label>
-                            <input type="number" id="viviendasExistentes" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-emerald-500">
+                            <label class="text-sm font-bold text-gray-700">Longitud Fachada Exterior (m):</label>
+                            <input type="number" id="checkFachada" oninput="evaluarTecnico()" class="w-full p-3 border rounded-lg mt-1 bg-slate-50">
+                            <div id="resFachada" class="text-xs font-medium mt-1 h-4"></div>
                         </div>
-                        <button onclick="calcularDensidad()" data-html2canvas-ignore class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded shadow-md transition-colors">Calcular Densidad</button>
-                        <div id="resultadoDensidad" class="mt-4 text-center font-bold text-lg hidden border-2 p-3 rounded"></div>
                     </div>
-                </section>
 
-                <section class="bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-sm">
-                    <h2 class="text-xl font-bold mb-3 text-gray-800">3. Análisis Técnico (Habitabilidad)</h2>
+                    <div class="grid md:grid-cols-2 gap-6 pt-4 border-t">
+                        <div>
+                            <label class="text-sm font-bold text-gray-700">Estatutos Comunidad:</label>
+                            <select class="w-full p-2 border rounded-lg mt-1 bg-slate-50"><option>Sin prohibición expresa</option><option>Con prohibición (Inviable)</option></select>
+                        </div>
+                        <div>
+                            <label class="text-sm font-bold text-gray-700">Salida de Humos:</label>
+                            <select class="w-full p-2 border rounded-lg mt-1 bg-slate-50"><option>A cubierta disponible</option><option>Posibilidad Filtro Carbono</option><option>Inviable</option></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="volver(1)" class="text-gray-500 hover:text-gray-800 font-bold py-3 px-6">⬅ Atrás</button>
+                    <button onclick="irPaso3()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg">Siguiente Paso ➔</button>
+                </div>
+            </div>
+
+            <div id="paso3" class="paso-bloque hidden">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-2">Fase 3: Modelado Financiero</h2>
+                
+                <div class="grid md:grid-cols-3 gap-6 bg-amber-50 p-6 rounded-xl border border-amber-100">
+                    <div class="space-y-3">
+                        <h3 class="font-black text-amber-900 uppercase text-xs tracking-wider">A. Adquisición</h3>
+                        <div><label class="text-xs font-bold text-gray-700">Precio Compra (€):</label><input type="number" id="precioCompra" class="w-full p-2 border rounded bg-white"></div>
+                        <div><label class="text-xs font-bold text-gray-700">Impuestos ITP (%):</label><input type="number" id="impCompraPct" value="10" class="w-full p-2 border rounded bg-white"></div>
+                        <div><label class="text-xs font-bold text-gray-700">Notaría/Registro (€):</label><input type="number" id="costeNotaria" value="1500" class="w-full p-2 border rounded bg-white"></div>
+                    </div>
                     
-                    <div class="space-y-4 bg-white p-4 rounded-lg border border-gray-300">
+                    <div class="space-y-3">
+                        <h3 class="font-black text-amber-900 uppercase text-xs tracking-wider">B. Reforma y Técnicos</h3>
+                        <div><label class="text-xs font-bold text-gray-700">Coste Reforma (€/m²):</label><input type="number" id="costeReformaM2" value="1000" class="w-full p-2 border rounded bg-white"></div>
+                        <div><label class="text-xs font-bold text-gray-700">Proyecto/Licencias (€):</label><input type="number" id="costeLicencias" value="6500" class="w-full p-2 border rounded bg-white"></div>
+                        <div class="bg-white p-2 rounded border text-xs space-y-2">
+                            <label class="flex items-center space-x-2"><input type="checkbox" id="extraCascoAntiguo" class="rounded text-amber-600"><span class="font-bold">+15% Logística Casco Ant.</span></label>
+                            <label class="flex items-center space-x-2"><input type="checkbox" id="tasaParking" class="rounded text-amber-600"><span class="font-bold text-red-600">+10k€/viv Multa Parking</span></label>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="font-black text-amber-900 uppercase text-xs tracking-wider">C. Salida</h3>
+                        <div><label class="text-xs font-bold text-gray-700">Comisión Inmobiliaria (%):</label><input type="number" id="honorariosVentaPct" value="3" class="w-full p-2 border rounded bg-white"></div>
+                        <div><label class="text-xs font-bold text-gray-700">Cédula y Gastos (€):</label><input type="number" id="otrosGastos" value="1000" class="w-full p-2 border rounded bg-white"></div>
+                        <div><label class="text-xs font-black text-blue-700">PRECIO VENTA TOTAL (€):</label><input type="number" id="precioVenta" class="w-full p-3 border-2 border-blue-400 rounded bg-blue-50 font-bold"></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="volver(2)" class="text-gray-500 hover:text-gray-800 font-bold py-3 px-6">⬅ Atrás</button>
+                    <button onclick="finalizarEvaluacion()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg">Calcular Rentabilidad ➔</button>
+                </div>
+            </div>
+
+            <div id="paso4" class="paso-bloque hidden">
+                <div id="resultadoExito" class="hidden">
+                    <div class="text-center mb-8">
+                        <div class="inline-block bg-green-100 text-green-600 p-4 rounded-full mb-4">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h2 class="text-3xl font-black text-slate-900">¡Operación Altamente Rentable!</h2>
+                        <p class="text-gray-600 mt-2">Esta propiedad cumple nuestros estrictos filtros de viabilidad de 9US.</p>
+                    </div>
+
+                    <div class="bg-slate-900 text-white rounded-2xl p-6 md:p-8 mb-8 shadow-2xl flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <span class="block text-gray-400 text-sm uppercase tracking-widest mb-1">Inversión Estimada</span>
+                            <span id="resInversion" class="text-3xl font-bold text-red-400">0 €</span>
+                        </div>
+                        <div>
+                            <span class="block text-gray-400 text-sm uppercase tracking-widest mb-1">Beneficio Neto</span>
+                            <span id="resBeneficio" class="text-3xl font-bold text-green-400">0 €</span>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-xl text-center min-w-[150px]">
+                            <span class="block text-blue-300 text-sm uppercase tracking-widest mb-1">R.O.I.</span>
+                            <span id="resROI" class="text-4xl font-black text-white">0 %</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 md:p-8" data-html2canvas-ignore>
+                        <h3 class="text-xl font-bold text-blue-900 mb-2">Hazlo realidad con 9US</h3>
+                        <p class="text-sm text-blue-700 mb-6">Déjanos tus datos. Nos encargamos del proyecto técnico, licencias y ejecución de la obra para asegurar esta rentabilidad.</p>
                         
-                        <div class="bg-blue-50 p-3 rounded border border-blue-200 flex items-center justify-between">
-                            <label class="text-sm font-bold text-blue-900">¿Cuántas viviendas vas a sacar?</label>
-                            <input type="number" id="numViviendasPlan" value="1" min="1" oninput="evaluarTecnico()" class="w-20 p-2 border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 text-center font-bold text-blue-900">
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label id="labelSupMinima" class="text-sm font-semibold text-gray-700">Sup. útil TOTAL (m²):</label>
-                                <input type="number" id="checkSuperficie" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 90">
+                        <form action="https://formspree.io/f/TU_CODIGO_FORMSPREE" method="POST" class="space-y-4">
+                            <input type="hidden" name="ROI_Estimado" id="hiddenRoi">
+                            <input type="hidden" name="Beneficio_Estimado" id="hiddenBeneficio">
+                            <input type="hidden" name="Municipio" id="hiddenMunicipio">
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div><label class="text-xs font-bold text-gray-700">Nombre completo:</label><input type="text" name="name" required class="w-full p-3 border rounded-lg bg-white mt-1"></div>
+                                <div><label class="text-xs font-bold text-gray-700">Teléfono:</label><input type="tel" name="phone" required class="w-full p-3 border rounded-lg bg-white mt-1"></div>
                             </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-700">Long. Fachada TOTAL (m):</label>
-                                <input type="number" id="checkFachada" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 10">
-                            </div>
-                        </div>
-
-                        <div id="panelTecnico" class="hidden space-y-2 p-3 rounded bg-gray-50 border">
-                            <div id="resSuperficie" class="text-sm font-medium"></div>
-                            <div id="resFachada" class="text-sm font-medium"></div>
-                        </div>
-
-                        <div class="flex items-center justify-between pt-2 border-t">
-                            <span class="text-sm font-medium text-gray-700">Estatutos SIN prohibición:</span>
-                            <select class="p-1 border rounded text-sm bg-gray-50"><option>Pendiente</option><option>Sí</option><option>No</option></select>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-700">Salida Humos:</span>
-                            <select class="p-1 border rounded text-sm bg-gray-50"><option>Pendiente</option><option>A Cubierta</option><option>Filtro Carbono</option><option>No viable</option></select>
-                        </div>
+                            <div><label class="text-xs font-bold text-gray-700">Email:</label><input type="email" name="email" required class="w-full p-3 border rounded-lg bg-white mt-1"></div>
+                            
+                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-lg shadow-lg text-lg transition-transform transform hover:-translate-y-1">
+                                Solicitar Llamada Gratuita
+                            </button>
+                        </form>
                     </div>
-                </section>
+                </div>
+
+                <div id="resultadoFracaso" class="hidden text-center py-12">
+                    <div class="inline-block bg-red-100 text-red-600 p-4 rounded-full mb-4">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </div>
+                    <h2 class="text-3xl font-black text-slate-900 mb-2">Operación Descartada</h2>
+                    <p class="text-gray-600 text-lg">La rentabilidad estimada (<span id="roiFracaso" class="font-bold text-red-600"></span>) es inferior a nuestros estándares del 10%, o existen riesgos insalvables.</p>
+                    <p class="text-sm text-gray-500 mt-6">En 9US solo ejecutamos proyectos seguros y de alta rentabilidad para nuestros clientes.</p>
+                </div>
+
+                <div class="mt-8 flex justify-center gap-4 border-t pt-6" data-html2canvas-ignore>
+                    <button onclick="volver(3)" class="text-gray-500 hover:text-gray-800 font-bold py-2 px-4">⬅ Revisar Datos</button>
+                    <button onclick="exportarPDF()" class="bg-gray-200 hover:bg-gray-300 text-slate-800 font-bold py-2 px-6 rounded-lg transition-colors flex items-center gap-2">
+                        📥 Descargar Informe PDF
+                    </button>
+                </div>
             </div>
 
-            <div class="space-y-6">
-                <section class="bg-amber-50 p-5 rounded-lg border border-amber-100 shadow-sm h-full flex flex-col">
-                    <h2 class="text-xl font-bold mb-3 text-amber-900">4. Viabilidad Económica (ROI)</h2>
-                    
-                    <div class="space-y-4 flex-grow bg-white p-4 rounded-lg border border-amber-200">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-700">Precio Compra (€):</label>
-                                <input type="number" id="precioCompra" class="w-full p-2 border border-gray-300 rounded mt-1">
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-700">Sup. a Reformar (m²):</label>
-                                <input type="number" id="m2Local" class="w-full p-2 border border-gray-300 rounded mt-1">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="text-sm font-semibold text-gray-700">Coste Reforma (€/m²):</label>
-                                <input type="number" id="costeReformaM2" class="w-full p-2 border border-gray-300 rounded mt-1" value="1000">
-                            </div>
-                            <div>
-                                <label class="text-sm font-semibold text-gray-700">Precio Venta TOTAL (€):</label>
-                                <input type="number" id="precioVenta" class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Suma de todas">
-                            </div>
-                        </div>
-
-                        <div class="bg-gray-50 p-3 rounded border border-gray-200 mt-4" id="cajaExtras">
-                            <h3 class="text-sm font-bold text-gray-700 mb-2">Costes Ocultos y Extras:</h3>
-                            <label class="flex items-center space-x-2 text-sm cursor-pointer">
-                                <input type="checkbox" id="riesgoRadon" class="rounded text-amber-600 w-4 h-4">
-                                <span class="font-medium text-gray-700">Radón / Acústica (+150€/m²)</span>
-                            </label>
-                            <label class="flex items-center space-x-2 text-sm mt-3 cursor-pointer" id="labelCascoAntiguo">
-                                <input type="checkbox" id="extraCascoAntiguo" class="rounded text-amber-600 w-4 h-4">
-                                <span class="font-medium text-gray-700">Logística Casco Antiguo (+15% reforma)</span>
-                            </label>
-                            <label class="flex items-center space-x-2 text-sm mt-3 cursor-pointer">
-                                <input type="checkbox" id="tasaParking" class="rounded text-amber-600 w-4 h-4">
-                                <span class="font-medium text-gray-700">Tasa compensatoria Parking (+10.000€/viv)</span>
-                            </label>
-                        </div>
-
-                        <button onclick="calcularROI()" data-html2canvas-ignore class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-4 rounded shadow-md mt-6">📊 Calcular Rentabilidad</button>
-
-                        <div id="panelResultados" class="hidden mt-6 bg-slate-50 p-5 rounded-lg border-2 border-slate-800 shadow-inner">
-                            <h3 class="text-lg font-bold text-center mb-4 text-slate-800 border-b pb-2">Resultados Financieros</h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center"><span class="text-gray-700 font-medium">Inversión Total:</span><span id="outInversion" class="font-bold text-red-600 text-lg">0 €</span></div>
-                                <div class="flex justify-between items-center"><span class="text-gray-700 font-medium">Beneficio Neto:</span><span id="outBeneficio" class="font-bold text-green-600 text-lg">0 €</span></div>
-                                <div class="flex justify-between items-center bg-white p-3 rounded border border-gray-200 mt-2"><span class="text-gray-900 font-bold text-xl">ROI Estimado:</span><span id="outROI" class="font-black text-2xl">0 %</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
         </div>
     </div>
 
     <script>
-        // CONFIGURACIÓN DE MUNICIPIOS
         const normasMunicipios = {
-            "barcelona": { 
-                visor: "https://ajuntament.barcelona.cat/informaciourbanistica/cerca/es/",
-                supMinima: 40,
-                permiteCarbono: false,
-                avisoHumos: "🔴 Humos: BCN exige extracción a cubierta casi sin excepciones.",
-                avisoParking: "ℹ️ Parking: Sujeto a densidad y exenciones del PGM."
-            },
-            "mataro": {
-                visor: "https://www.mataro.cat/es/temas/urbanismo/planificacion-urbanistica/planeamiento-urbanistico-vigente/planeamiento-urbanistico-vigente", 
-                supMinima: 36,
-                permiteCarbono: false,
-                avisoHumos: "🔴 Humos: Suele requerir extracción a cubierta.",
-                avisoParking: "⚠️ PARKING: Exige vincular plaza registral en la misma finca o radio cercano."
-            },
-            "sabadell": {
-                visor: "https://visors.sabadell.cat/VisorUrbanistic/",
-                supMinima: 36,
-                permiteCarbono: true,
-                avisoHumos: "🟢 Humos: Históricamente han admitido campanas de carbono para cambios de uso.",
-                avisoParking: "ℹ️ Parking: Revisar ordenanza de movilidad para cambios de uso."
-            },
-            "terrassa": {
-                visor: "https://aoberta.terrassa.cat/urbanisme/mapa/",
-                supMinima: 36,
-                permiteCarbono: true,
-                avisoHumos: "🟢 Humos: Algunos técnicos aceptan filtros de carbono justificados.",
-                avisoParking: "ℹ️ Parking: Requiere justificación según POUM."
-            },
-            "lhospitalet": {
-                visor: "https://lhgeoportal.l-h.cat/",
-                supMinima: 36,
-                permiteCarbono: false,
-                avisoHumos: "🔴 Humos: Muy restrictivos, exigen chimenea a cubierta.",
-                avisoParking: "ℹ️ Parking: Se rige por el PGM, revisar densidad."
-            },
-            "general": {
-                visor: "https://dtes.gencat.cat/muc-visor/",
-                supMinima: 36,
-                permiteCarbono: false,
-                avisoHumos: "ℹ️ Humos: Por defecto el CTE exige salida a cubierta.",
-                avisoParking: "ℹ️ Parking: Consulta el POUM local."
-            }
+            "barcelona": { visor: "https://ajuntament.barcelona.cat/informaciourbanistica/cerca/es/", supMinima: 40, avisoHumos: "🔴 BCN exige extracción a cubierta.", avisoParking: "ℹ️ Parking sujeto a PGM." },
+            "mataro": { visor: "https://www.mataro.cat/es/temas/urbanismo/planificacion-urbanistica/planeamiento-urbanistico-vigente/planeamiento-urbanistico-vigente", supMinima: 36, avisoHumos: "🔴 Requiere cubierta.", avisoParking: "⚠️ PARKING: Exige vincular plaza." },
+            "sabadell": { visor: "https://visors.sabadell.cat/VisorUrbanistic/", supMinima: 36, avisoHumos: "🟢 Admiten carbono.", avisoParking: "ℹ️ Revisar ordenanza." },
+            "terrassa": { visor: "https://aoberta.terrassa.cat/urbanisme/mapa/", supMinima: 36, avisoHumos: "🟢 Posible carbono.", avisoParking: "ℹ️ Según POUM." },
+            "lhospitalet": { visor: "https://lhgeoportal.l-h.cat/", supMinima: 36, avisoHumos: "🔴 Chimenea obligatoria.", avisoParking: "ℹ️ Rige PGM." },
+            "general": { visor: "https://dtes.gencat.cat/muc-visor/", supMinima: 36, avisoHumos: "ℹ️ CTE exige salida.", avisoParking: "ℹ️ Consulta POUM local." }
         };
-
         let supMinimaActual = 36;
+        let densidadValida = false;
+        let tecnicaValida = false;
 
-        // 1. ACTUALIZAR REGLAS
         function actualizarReglasMunicipio() {
             const mun = document.getElementById('municipioSelect').value;
-            const reglas = normasMunicipios[mun];
-            
-            supMinimaActual = reglas.supMinima;
-            
-            const cajaAvisos = document.getElementById('avisosMunicipio');
-            document.getElementById('avisoParking').innerText = reglas.avisoParking;
-            document.getElementById('avisoHumos').innerText = reglas.avisoHumos;
-            cajaAvisos.classList.remove('hidden');
-
-            evaluarTecnico();
+            supMinimaActual = normasMunicipios[mun].supMinima;
+            document.getElementById('avisoParking').innerText = normasMunicipios[mun].avisoParking;
+            document.getElementById('avisoHumos').innerText = normasMunicipios[mun].avisoHumos;
+            document.getElementById('avisosMunicipio').classList.remove('hidden');
         }
+        function abrirVisor() { window.open(normasMunicipios[document.getElementById('municipioSelect').value].visor, '_blank'); }
 
-        function abrirVisor() {
-            const mun = document.getElementById('municipioSelect').value;
-            window.open(normasMunicipios[mun].visor, '_blank');
-        }
-
-        // 2. MATEMÁTICAS HABITABILIDAD (MULTIVIVIENDA)
-        function evaluarTecnico() {
-            const sup = parseFloat(document.getElementById('checkSuperficie').value);
-            const fac = parseFloat(document.getElementById('checkFachada').value);
-            const numVivs = parseInt(document.getElementById('numViviendasPlan').value) || 1;
-            
-            const panel = document.getElementById('panelTecnico');
-            const resSup = document.getElementById('resSuperficie');
-            const resFac = document.getElementById('resFachada');
-
-            // Actualizar Label Dinámicamente
-            document.getElementById('labelSupMinima').innerText = `Sup. útil TOTAL (≥${supMinimaActual * numVivs}m²):`;
-
-            if(!sup && !fac) { panel.classList.add('hidden'); return; }
-            panel.classList.remove('hidden');
-
-            // Superficie
-            if (sup) {
-                const reqSupTotal = supMinimaActual * numVivs;
-                if (sup >= reqSupTotal) {
-                    resSup.innerHTML = `✅ <strong>Superficie:</strong> Cumple para ${numVivs} vivienda(s) (≥ ${reqSupTotal}m²).`;
-                    resSup.className = "text-sm text-green-700";
-                    document.getElementById('m2Local').value = sup; // Relleno automático
-                } else {
-                    resSup.innerHTML = `❌ <strong>Superficie:</strong> Insuficiente. Para ${numVivs} vivienda(s) necesitas mínimo ${reqSupTotal}m².`;
-                    resSup.className = "text-sm text-red-600 font-bold";
-                }
-            }
-
-            // Fachada (L >= S/9)
-            if (sup && fac) {
-                const reqFachada = sup / 9;
-                if (fac >= reqFachada) {
-                    resFac.innerHTML = `✅ <strong>Fachada:</strong> Cumple fórmula S/9 (Mínimo requerido: ${reqFachada.toFixed(2)}m).`;
-                    resFac.className = "text-sm text-green-700 mt-1";
-                } else {
-                    resFac.innerHTML = `❌ <strong>Fachada:</strong> Insuficiente. Según tus ${sup}m², necesitas mínimo ${reqFachada.toFixed(2)}m de fachada total.`;
-                    resFac.className = "text-sm text-red-600 font-bold mt-1";
-                }
-            }
-        }
-
-        // 3. DECODIFICADOR PGM
-        const diccionarioZonas = {
-            "12": { nombre: "Casco Antiguo", vivienda: true, nota: "Se activó +15% de coste por logística en calculadora." },
-            "13": { nombre: "Densificación Urbana", vivienda: true, nota: "Verifica densidad en catastro." },
-            "14": { nombre: "Ensanche", vivienda: true, nota: "Sujeto a ventilación patio manzana." },
-            "22A": { nombre: "Industrial", vivienda: false, nota: "Residencial PROHIBIDO." },
-            "22@": { nombre: "22@", vivienda: false, nota: "Residencial PROHIBIDO." }
-        };
-
+        const dicZonas = { "12": { n: "Casco Antiguo", v: true }, "13": { n: "Densificación", v: true }, "14": { n: "Ensanche", v: true }, "22A": { n: "Industrial", v: false }, "22@": { n: "22@", v: false } };
         function comprobarClave() {
             const input = document.getElementById('claveUrbana').value.toUpperCase().trim();
-            const divRes = document.getElementById('resultadoClave');
-            const checkCasco = document.getElementById('extraCascoAntiguo');
-            
             if (!input) return;
-            divRes.className = "mt-3 text-sm p-3 rounded border-2"; divRes.classList.remove('hidden');
+            const res = document.getElementById('resultadoClave');
+            res.classList.remove('hidden');
+            let key = Object.keys(dicZonas).find(k => input.startsWith(k));
+            document.getElementById('extraCascoAntiguo').checked = (key === "12");
 
-            let baseKey = Object.keys(diccionarioZonas).find(k => input.startsWith(k));
-            let data = baseKey ? diccionarioZonas[baseKey] : null;
-
-            if (baseKey === "12") { checkCasco.checked = true; } else { checkCasco.checked = false; }
-
-            if (data) {
-                divRes.innerHTML = `<strong>Zona ${input} - ${data.nombre}</strong><br>${data.vivienda ? '✅ PERMITIDO' : '❌ PROHIBIDO'}.<br><span class="text-xs">${data.nota}</span>`;
-                divRes.classList.add(data.vivienda ? 'bg-green-50' : 'bg-red-50', data.vivienda ? 'border-green-400' : 'border-red-400', data.vivienda ? 'text-green-900' : 'text-red-900');
+            if (key) {
+                res.innerHTML = `<strong>${dicZonas[key].n}</strong>: ${dicZonas[key].v ? '✅ PERMITIDO' : '❌ PROHIBIDO'}`;
+                res.className = `mt-2 text-xs p-2 rounded border ${dicZonas[key].v ? 'bg-green-50 border-green-400 text-green-900' : 'bg-red-50 border-red-400 text-red-900'}`;
             } else {
-                divRes.innerHTML = `⚠️ <strong>Clave no registrada.</strong> Consulta planeamiento.`;
-                divRes.classList.add('bg-yellow-50', 'border-yellow-400', 'text-yellow-900');
+                res.innerHTML = `⚠️ Clave no registrada.`;
+                res.className = "mt-2 text-xs p-2 rounded border bg-yellow-50 border-yellow-400";
             }
         }
 
-        // 4. DENSIDAD
         function calcularDensidad() {
             const p = parseFloat(document.getElementById('superficieParcela').value);
             const i = parseFloat(document.getElementById('indiceDensidad').value);
             const e = parseInt(document.getElementById('viviendasExistentes').value);
-            const divRes = document.getElementById('resultadoDensidad');
-
             if (!p || !i || isNaN(e)) return;
-            const max = Math.floor(p / i); const disp = max - e;
-            divRes.className = "mt-4 text-center font-bold text-lg border-2 p-3 rounded"; divRes.classList.remove('hidden');
-
+            const disp = Math.floor(p / i) - e;
+            const res = document.getElementById('resultadoDensidad');
+            res.classList.remove('hidden');
             if (disp > 0) {
-                divRes.innerHTML = `✅ ¡VIABLE! <br> Caben <span class="text-2xl">${disp}</span> vivienda(s) más.`;
-                divRes.classList.add('text-green-700', 'bg-green-50', 'border-green-400');
-                
-                // Sugerir este número en el planificador
+                res.innerHTML = `✅ Caben ${disp} vivienda(s) más.`;
+                res.className = "mt-2 text-center font-bold text-sm p-2 rounded text-green-700 bg-green-50 border border-green-400";
                 document.getElementById('numViviendasPlan').value = disp;
-                evaluarTecnico();
+                densidadValida = true;
             } else {
-                divRes.innerHTML = `❌ INVIABLE. Densidad agotada.`;
-                divRes.classList.add('text-red-700', 'bg-red-50', 'border-red-400');
+                res.innerHTML = `❌ Densidad agotada. Inviable.`;
+                res.className = "mt-2 text-center font-bold text-sm p-2 rounded text-red-700 bg-red-50 border border-red-400";
+                densidadValida = false;
             }
         }
 
-        // 5. ROI
-        function calcularROI() {
-            const compra = parseFloat(document.getElementById('precioCompra').value) || 0;
-            const m2 = parseFloat(document.getElementById('m2Local').value) || 0;
-            const costeM2Base = parseFloat(document.getElementById('costeReformaM2').value) || 0;
-            const venta = parseFloat(document.getElementById('precioVenta').value) || 0;
-            
+        function evaluarTecnico() {
+            const sup = parseFloat(document.getElementById('checkSuperficie').value);
+            const fac = parseFloat(document.getElementById('checkFachada').value);
             const numVivs = parseInt(document.getElementById('numViviendasPlan').value) || 1;
-
-            if (compra === 0 || m2 === 0 || venta === 0) { alert("Completa los datos de Compra, Superficie y Venta TOTAL."); return; }
-
-            const costeRefBase = m2 * costeM2Base;
-            const extraRadon = document.getElementById('riesgoRadon').checked ? (150 * m2) : 0;
-            const extraCasco = document.getElementById('extraCascoAntiguo').checked ? (costeRefBase * 0.15) : 0;
+            document.getElementById('labelSupMinima').innerText = `Sup. TOTAL (≥${supMinimaActual * numVivs}m²):`;
             
-            // La multa de parking se multiplica por las viviendas que sacas
-            const tasaParking = document.getElementById('tasaParking').checked ? (10000 * numVivs) : 0;
+            let supOk = false; let facOk = false;
 
-            const invTotal = compra + (compra * 0.10) + (costeRefBase + extraRadon + extraCasco) * 1.06 + tasaParking;
-            const beneficio = venta - invTotal;
-            const roi = invTotal > 0 ? (beneficio / invTotal) * 100 : 0;
-
-            document.getElementById('panelResultados').classList.remove('hidden');
-            const fmt = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
-            document.getElementById('outInversion').innerText = fmt.format(invTotal);
-            document.getElementById('outBeneficio').innerText = fmt.format(beneficio);
-            
-            const rSpan = document.getElementById('outROI');
-            rSpan.innerText = roi.toFixed(1) + ' %';
-            rSpan.className = roi >= 15 ? 'font-black text-2xl text-green-600' : (roi >= 0 ? 'font-black text-2xl text-amber-500' : 'font-black text-2xl text-red-600');
+            if (sup) {
+                const reqSup = supMinimaActual * numVivs;
+                const resSup = document.getElementById('resSuperficie');
+                if (sup >= reqSup) { resSup.innerHTML = `✅ Sup. Cumple`; resSup.className = "text-green-700 font-bold"; supOk = true; } 
+                else { resSup.innerHTML = `❌ Mínimo ${reqSup}m²`; resSup.className = "text-red-600 font-bold"; }
+            }
+            if (sup && fac) {
+                const reqFac = sup / 9;
+                const resFac = document.getElementById('resFachada');
+                if (fac >= reqFac) { resFac.innerHTML = `✅ Fachada Cumple`; resFac.className = "text-green-700 font-bold"; facOk = true; } 
+                else { resFac.innerHTML = `❌ Insuficiente`; resFac.className = "text-red-600 font-bold"; }
+            }
+            tecnicaValida = (supOk && facOk);
         }
 
-        // 6. EXPORTAR PDF
+        function irPaso2() {
+            if (!densidadValida) { alert("Debes verificar que la densidad es viable (Paso 1) calculándola en verde."); return; }
+            cambiarPaso(1, 2);
+        }
+        function irPaso3() {
+            if (!tecnicaValida) { alert("Las medidas introducidas no cumplen la normativa técnica mínima. No se puede legalizar."); return; }
+            cambiarPaso(2, 3);
+        }
+        function volver(destino) { cambiarPaso(destino + 1, destino); }
+
+        function cambiarPaso(actual, destino) {
+            document.getElementById(`paso${actual}`).classList.add('hidden');
+            document.getElementById(`paso${destino}`).classList.remove('hidden');
+            const p = (destino - 1) * 33.3;
+            document.getElementById('progressBar').style.width = `${p}%`;
+            
+            for(let i=1; i<=4; i++) {
+                let txt = document.getElementById(`progText${i}`);
+                if(i <= destino) { txt.classList.remove('text-gray-400'); txt.classList.add('text-blue-600'); }
+                else { txt.classList.remove('text-blue-600'); txt.classList.add('text-gray-400'); }
+            }
+        }
+
+        function finalizarEvaluacion() {
+            const compra = parseFloat(document.getElementById('precioCompra').value) || 0;
+            const venta = parseFloat(document.getElementById('precioVenta').value) || 0;
+            if (compra === 0 || venta === 0) { alert("Completa Precio de Compra y Precio de Venta Estimado."); return; }
+
+            const m2 = parseFloat(document.getElementById('checkSuperficie').value) || 0;
+            const numVivs = parseInt(document.getElementById('numViviendasPlan').value) || 1;
+            const costeRef = (m2 * (parseFloat(document.getElementById('costeReformaM2').value) || 1000));
+            const penalizacion = document.getElementById('extraCascoAntiguo').checked ? (costeRef*0.15) : 0;
+            const parking = document.getElementById('tasaParking').checked ? (10000 * numVivs) : 0;
+
+            const adquisicion = compra + (compra * ((parseFloat(document.getElementById('impCompraPct').value) || 10)/100)) + (parseFloat(document.getElementById('costeNotaria').value) || 0);
+            const obra = costeRef + penalizacion + (parseFloat(document.getElementById('costeLicencias').value) || 0) + parking;
+            const comercializacion = (parseFloat(document.getElementById('otrosGastos').value) || 0) + (venta * ((parseFloat(document.getElementById('honorariosVentaPct').value) || 3)/100));
+
+            const inversionTotal = adquisicion + obra + comercializacion;
+            const beneficio = venta - inversionTotal;
+            const roi = inversionTotal > 0 ? (beneficio / inversionTotal) * 100 : 0;
+
+            if (roi >= 10) {
+                document.getElementById('resultadoExito').classList.remove('hidden');
+                document.getElementById('resultadoFracaso').classList.add('hidden');
+                
+                const fmt = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+                document.getElementById('resInversion').innerText = fmt.format(inversionTotal);
+                document.getElementById('resBeneficio').innerText = fmt.format(beneficio);
+                document.getElementById('resROI').innerText = roi.toFixed(1) + ' %';
+                
+                document.getElementById('hiddenRoi').value = roi.toFixed(1) + ' %';
+                document.getElementById('hiddenBeneficio').value = fmt.format(beneficio);
+                const mun = document.getElementById('municipioSelect');
+                document.getElementById('hiddenMunicipio').value = mun.options[mun.selectedIndex].text;
+            } else {
+                document.getElementById('resultadoExito').classList.add('hidden');
+                document.getElementById('resultadoFracaso').classList.remove('hidden');
+                document.getElementById('roiFracaso').innerText = roi.toFixed(1) + ' %';
+            }
+            cambiarPaso(3, 4);
+        }
+
         function exportarPDF() {
-            if(document.getElementById('precioCompra').value) calcularROI();
             const el = document.getElementById('informePDF');
-            html2pdf().set({ margin: 10, filename: 'Estudio_Viabilidad.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from(el).save();
+            html2pdf().set({ margin: 10, filename: 'Evaluacion_9US.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from(el).save();
         }
 
         window.onload = actualizarReglasMunicipio;
