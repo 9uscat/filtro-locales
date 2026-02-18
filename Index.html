@@ -81,17 +81,23 @@
                 </section>
 
                 <section class="bg-gray-50 p-5 rounded-lg border border-gray-200 shadow-sm">
-                    <h2 class="text-xl font-bold mb-3 text-gray-800">3. Análisis Técnico (Cálculo S/9)</h2>
+                    <h2 class="text-xl font-bold mb-3 text-gray-800">3. Análisis Técnico (Habitabilidad)</h2>
                     
                     <div class="space-y-4 bg-white p-4 rounded-lg border border-gray-300">
+                        
+                        <div class="bg-blue-50 p-3 rounded border border-blue-200 flex items-center justify-between">
+                            <label class="text-sm font-bold text-blue-900">¿Cuántas viviendas vas a sacar?</label>
+                            <input type="number" id="numViviendasPlan" value="1" min="1" oninput="evaluarTecnico()" class="w-20 p-2 border border-blue-300 rounded focus:ring-2 focus:ring-blue-500 text-center font-bold text-blue-900">
+                        </div>
+
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label id="labelSupMinima" class="text-sm font-semibold text-gray-700">Superficie útil (m²):</label>
-                                <input type="number" id="checkSuperficie" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 45">
+                                <label id="labelSupMinima" class="text-sm font-semibold text-gray-700">Sup. útil TOTAL (m²):</label>
+                                <input type="number" id="checkSuperficie" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 90">
                             </div>
                             <div>
-                                <label class="text-sm font-semibold text-gray-700">Longitud Fachada (m):</label>
-                                <input type="number" id="checkFachada" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 5.5">
+                                <label class="text-sm font-semibold text-gray-700">Long. Fachada TOTAL (m):</label>
+                                <input type="number" id="checkFachada" oninput="evaluarTecnico()" class="w-full p-2 border border-gray-300 rounded mt-1 focus:ring-2 focus:ring-gray-500" placeholder="Ej: 10">
                             </div>
                         </div>
 
@@ -105,7 +111,7 @@
                             <select class="p-1 border rounded text-sm bg-gray-50"><option>Pendiente</option><option>Sí</option><option>No</option></select>
                         </div>
                         <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-700">Salida Humos (Física o Carbono):</span>
+                            <span class="text-sm font-medium text-gray-700">Salida Humos:</span>
                             <select class="p-1 border rounded text-sm bg-gray-50"><option>Pendiente</option><option>A Cubierta</option><option>Filtro Carbono</option><option>No viable</option></select>
                         </div>
                     </div>
@@ -123,7 +129,7 @@
                                 <input type="number" id="precioCompra" class="w-full p-2 border border-gray-300 rounded mt-1">
                             </div>
                             <div>
-                                <label class="text-sm font-semibold text-gray-700">Superficie Local (m²):</label>
+                                <label class="text-sm font-semibold text-gray-700">Sup. a Reformar (m²):</label>
                                 <input type="number" id="m2Local" class="w-full p-2 border border-gray-300 rounded mt-1">
                             </div>
                         </div>
@@ -134,8 +140,8 @@
                                 <input type="number" id="costeReformaM2" class="w-full p-2 border border-gray-300 rounded mt-1" value="1000">
                             </div>
                             <div>
-                                <label class="text-sm font-semibold text-gray-700">Precio Venta (€):</label>
-                                <input type="number" id="precioVenta" class="w-full p-2 border border-gray-300 rounded mt-1">
+                                <label class="text-sm font-semibold text-gray-700">Precio Venta TOTAL (€):</label>
+                                <input type="number" id="precioVenta" class="w-full p-2 border border-gray-300 rounded mt-1" placeholder="Suma de todas">
                             </div>
                         </div>
 
@@ -151,7 +157,7 @@
                             </label>
                             <label class="flex items-center space-x-2 text-sm mt-3 cursor-pointer">
                                 <input type="checkbox" id="tasaParking" class="rounded text-amber-600 w-4 h-4">
-                                <span class="font-medium text-gray-700">Tasa compensatoria Parking (+10.000€)</span>
+                                <span class="font-medium text-gray-700">Tasa compensatoria Parking (+10.000€/viv)</span>
                             </label>
                         </div>
 
@@ -172,34 +178,34 @@
     </div>
 
     <script>
-        // CONFIGURACIÓN DE MUNICIPIOS (El "Cerebro")
+        // CONFIGURACIÓN DE MUNICIPIOS
         const normasMunicipios = {
             "barcelona": { 
                 visor: "https://ajuntament.barcelona.cat/informaciourbanistica/cerca/es/",
                 supMinima: 40,
                 permiteCarbono: false,
-                avisoHumos: "🔴 Humos: BCN exige extracción a cubierta casi sin excepciones para legalizar.",
-                avisoParking: "ℹ️ Parking: Sujeto a densidad y exenciones del PGM según tamaño y zona."
+                avisoHumos: "🔴 Humos: BCN exige extracción a cubierta casi sin excepciones.",
+                avisoParking: "ℹ️ Parking: Sujeto a densidad y exenciones del PGM."
             },
             "mataro": {
-                visor: "https://www.mataro.cat/es/temas/urbanismo/planificacion-urbanistica/planeamiento-urbanistico-vigente/planeamiento-urbanistico-vigente",
+                visor: "https://www.mataro.cat/es/temas/urbanismo/planificacion-urbanistica/planeamiento-urbanistico-vigente/planeamiento-urbanistico-vigente", 
                 supMinima: 36,
                 permiteCarbono: false,
                 avisoHumos: "🔴 Humos: Suele requerir extracción a cubierta.",
-                avisoParking: "⚠️ PARKING: Exige vincular plaza registral en la misma finca o radio cercano. Consulta posibles exenciones (pagos compensatorios)."
+                avisoParking: "⚠️ PARKING: Exige vincular plaza registral en la misma finca o radio cercano."
             },
             "sabadell": {
                 visor: "https://visors.sabadell.cat/VisorUrbanistic/",
                 supMinima: 36,
-                permiteCarbono: true, // Ejemplo (modificable según ordenanza actual)
-                avisoHumos: "🟢 Humos: Históricamente han admitido campanas de carbono para cambios de uso sin tiro natural. Confirmar con OAC.",
+                permiteCarbono: true,
+                avisoHumos: "🟢 Humos: Históricamente han admitido campanas de carbono para cambios de uso.",
                 avisoParking: "ℹ️ Parking: Revisar ordenanza de movilidad para cambios de uso."
             },
             "terrassa": {
                 visor: "https://aoberta.terrassa.cat/urbanisme/mapa/",
                 supMinima: 36,
                 permiteCarbono: true,
-                avisoHumos: "🟢 Humos: Algunos técnicos municipales aceptan filtros de carbono justificados.",
+                avisoHumos: "🟢 Humos: Algunos técnicos aceptan filtros de carbono justificados.",
                 avisoParking: "ℹ️ Parking: Requiere justificación según POUM."
             },
             "lhospitalet": {
@@ -213,29 +219,25 @@
                 visor: "https://dtes.gencat.cat/muc-visor/",
                 supMinima: 36,
                 permiteCarbono: false,
-                avisoHumos: "ℹ️ Humos: Por defecto el CTE exige salida a cubierta. Consulta si este ayuntamiento admite filtros de carbono.",
+                avisoHumos: "ℹ️ Humos: Por defecto el CTE exige salida a cubierta.",
                 avisoParking: "ℹ️ Parking: Consulta el POUM local."
             }
         };
 
-        let supMinimaActual = 36; // Variable global
+        let supMinimaActual = 36;
 
-        // 1. ACTUALIZAR REGLAS AL CAMBIAR MUNICIPIO
+        // 1. ACTUALIZAR REGLAS
         function actualizarReglasMunicipio() {
             const mun = document.getElementById('municipioSelect').value;
             const reglas = normasMunicipios[mun];
             
-            // Actualizar variables y textos
             supMinimaActual = reglas.supMinima;
-            document.getElementById('labelSupMinima').innerText = `Superficie útil req. (≥${supMinimaActual}m²):`;
             
-            // Mostrar avisos
             const cajaAvisos = document.getElementById('avisosMunicipio');
             document.getElementById('avisoParking').innerText = reglas.avisoParking;
             document.getElementById('avisoHumos').innerText = reglas.avisoHumos;
             cajaAvisos.classList.remove('hidden');
 
-            // Re-evaluar matemáticas si ya había datos escritos
             evaluarTecnico();
         }
 
@@ -244,44 +246,49 @@
             window.open(normasMunicipios[mun].visor, '_blank');
         }
 
-        // 2. MATEMÁTICAS: DECRETO DE HABITABILIDAD (Superficie y S/9)
+        // 2. MATEMÁTICAS HABITABILIDAD (MULTIVIVIENDA)
         function evaluarTecnico() {
             const sup = parseFloat(document.getElementById('checkSuperficie').value);
             const fac = parseFloat(document.getElementById('checkFachada').value);
+            const numVivs = parseInt(document.getElementById('numViviendasPlan').value) || 1;
+            
             const panel = document.getElementById('panelTecnico');
             const resSup = document.getElementById('resSuperficie');
             const resFac = document.getElementById('resFachada');
 
+            // Actualizar Label Dinámicamente
+            document.getElementById('labelSupMinima').innerText = `Sup. útil TOTAL (≥${supMinimaActual * numVivs}m²):`;
+
             if(!sup && !fac) { panel.classList.add('hidden'); return; }
             panel.classList.remove('hidden');
 
-            // Evaluar Superficie
+            // Superficie
             if (sup) {
-                if (sup >= supMinimaActual) {
-                    resSup.innerHTML = `✅ <strong>Superficie:</strong> Cumple (≥ ${supMinimaActual}m²).`;
+                const reqSupTotal = supMinimaActual * numVivs;
+                if (sup >= reqSupTotal) {
+                    resSup.innerHTML = `✅ <strong>Superficie:</strong> Cumple para ${numVivs} vivienda(s) (≥ ${reqSupTotal}m²).`;
                     resSup.className = "text-sm text-green-700";
-                    // Rellenar automáticamente la económica
-                    document.getElementById('m2Local').value = sup;
+                    document.getElementById('m2Local').value = sup; // Relleno automático
                 } else {
-                    resSup.innerHTML = `❌ <strong>Superficie:</strong> NO cumple (Requiere ${supMinimaActual}m²).`;
+                    resSup.innerHTML = `❌ <strong>Superficie:</strong> Insuficiente. Para ${numVivs} vivienda(s) necesitas mínimo ${reqSupTotal}m².`;
                     resSup.className = "text-sm text-red-600 font-bold";
                 }
             }
 
-            // Evaluar Fachada (L >= S/9)
+            // Fachada (L >= S/9)
             if (sup && fac) {
                 const reqFachada = sup / 9;
                 if (fac >= reqFachada) {
                     resFac.innerHTML = `✅ <strong>Fachada:</strong> Cumple fórmula S/9 (Mínimo requerido: ${reqFachada.toFixed(2)}m).`;
                     resFac.className = "text-sm text-green-700 mt-1";
                 } else {
-                    resFac.innerHTML = `❌ <strong>Fachada:</strong> Insuficiente. Según tus m², necesitas mínimo ${reqFachada.toFixed(2)}m (S/9).`;
+                    resFac.innerHTML = `❌ <strong>Fachada:</strong> Insuficiente. Según tus ${sup}m², necesitas mínimo ${reqFachada.toFixed(2)}m de fachada total.`;
                     resFac.className = "text-sm text-red-600 font-bold mt-1";
                 }
             }
         }
 
-        // 3. DECODIFICADOR PGM (Mantiene la función anterior)
+        // 3. DECODIFICADOR PGM
         const diccionarioZonas = {
             "12": { nombre: "Casco Antiguo", vivienda: true, nota: "Se activó +15% de coste por logística en calculadora." },
             "13": { nombre: "Densificación Urbana", vivienda: true, nota: "Verifica densidad en catastro." },
@@ -326,6 +333,10 @@
             if (disp > 0) {
                 divRes.innerHTML = `✅ ¡VIABLE! <br> Caben <span class="text-2xl">${disp}</span> vivienda(s) más.`;
                 divRes.classList.add('text-green-700', 'bg-green-50', 'border-green-400');
+                
+                // Sugerir este número en el planificador
+                document.getElementById('numViviendasPlan').value = disp;
+                evaluarTecnico();
             } else {
                 divRes.innerHTML = `❌ INVIABLE. Densidad agotada.`;
                 divRes.classList.add('text-red-700', 'bg-red-50', 'border-red-400');
@@ -338,13 +349,17 @@
             const m2 = parseFloat(document.getElementById('m2Local').value) || 0;
             const costeM2Base = parseFloat(document.getElementById('costeReformaM2').value) || 0;
             const venta = parseFloat(document.getElementById('precioVenta').value) || 0;
+            
+            const numVivs = parseInt(document.getElementById('numViviendasPlan').value) || 1;
 
-            if (compra === 0 || m2 === 0 || venta === 0) { alert("Completa los datos de Compra, Superficie y Venta."); return; }
+            if (compra === 0 || m2 === 0 || venta === 0) { alert("Completa los datos de Compra, Superficie y Venta TOTAL."); return; }
 
             const costeRefBase = m2 * costeM2Base;
             const extraRadon = document.getElementById('riesgoRadon').checked ? (150 * m2) : 0;
             const extraCasco = document.getElementById('extraCascoAntiguo').checked ? (costeRefBase * 0.15) : 0;
-            const tasaParking = document.getElementById('tasaParking').checked ? 10000 : 0;
+            
+            // La multa de parking se multiplica por las viviendas que sacas
+            const tasaParking = document.getElementById('tasaParking').checked ? (10000 * numVivs) : 0;
 
             const invTotal = compra + (compra * 0.10) + (costeRefBase + extraRadon + extraCasco) * 1.06 + tasaParking;
             const beneficio = venta - invTotal;
@@ -367,7 +382,6 @@
             html2pdf().set({ margin: 10, filename: 'Estudio_Viabilidad.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { format: 'a4' } }).from(el).save();
         }
 
-        // Iniciar con las reglas de "General"
         window.onload = actualizarReglasMunicipio;
     </script>
 </body>
