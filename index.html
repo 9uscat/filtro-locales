@@ -1,69 +1,165 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>9US | Especialistas en Cambios de Uso a Vivienda</title>
+    <title>9US | Multiplica la rentabilidad de tu local</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        indigo: {
+                            600: '#4F46E5',
+                            700: '#4338CA',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-50 font-sans text-gray-800">
+<body class="bg-slate-50 text-slate-900 antialiased overflow-x-hidden relative">
 
-    <nav class="bg-white shadow-md p-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="text-2xl font-black text-slate-800 tracking-tighter">
-                9<span class="text-blue-600">US</span>
-            </div>
-            <a href="evaluador.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors shadow-md text-sm">
-                Área Clientes / Evaluar Local
+    <div class="absolute top-0 left-1/2 w-[800px] h-[400px] bg-indigo-300/30 rounded-full mix-blend-multiply filter blur-[100px] opacity-70 animate-blob pointer-events-none transform -translate-x-1/2"></div>
+
+    <nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-3xl font-black tracking-tighter text-slate-900 group">
+                9<span class="text-indigo-600 transition-colors group-hover:text-indigo-700">US</span>
+            </a>
+            <a href="evaluador.html" class="hidden sm:inline-flex items-center justify-center bg-slate-900 hover:bg-indigo-600 text-white text-sm font-bold py-2.5 px-6 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                Área Clientes
             </a>
         </div>
     </nav>
 
-    <section class="max-w-6xl mx-auto px-4 py-20 md:py-32 grid md:grid-cols-2 gap-12 items-center">
-        <div>
-            <span class="text-blue-600 font-bold tracking-wider text-sm uppercase">Inversión Inteligente en Cataluña</span>
-            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mt-4 leading-tight">
-                Transformamos locales comerciales en <span class="text-blue-600">viviendas rentables.</span>
-            </h1>
-            <p class="text-lg text-gray-600 mt-6 leading-relaxed">
-                En <strong>9US</strong> dominamos la complejidad técnica, urbanística y legal. Filtramos el mercado para ti, gestionamos el cambio de uso y maximizamos el ROI de tu inversión inmobiliaria.
+    <section class="relative pt-40 pb-20 md:pt-52 md:pb-32 px-4 max-w-7xl mx-auto flex flex-col items-center text-center z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-sm mb-8 shadow-sm">
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+            </span>
+            Especialistas en Inversión en Cataluña
+        </div>
+        
+        <h1 class="text-6xl md:text-8xl lg:text-[7.5rem] font-black tracking-tighter text-slate-900 leading-[1.05] mb-8">
+            Convierte tu local en <br class="hidden md:block">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">alta rentabilidad.</span>
+        </h1>
+        
+        <p class="text-xl md:text-2xl text-slate-600 mb-12 max-w-3xl leading-relaxed font-medium">
+            Transformamos espacios comerciales vacíos en viviendas de alta demanda. Dominamos el laberinto técnico y legal para maximizar tu ROI sin dolores de cabeza.
+        </p>
+        
+        <a href="evaluador.html" class="group relative inline-flex items-center justify-center gap-3 bg-indigo-600 text-white text-xl md:text-2xl font-bold py-6 px-12 rounded-full overflow-hidden transition-all duration-300 hover:bg-indigo-700 hover:scale-105 shadow-[0_0_40px_-10px_rgba(79,70,229,0.5)]">
+            <span class="relative z-10">Evaluar mi local gratis</span>
+            <svg class="w-6 h-6 relative z-10 transform transition-transform duration-300 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </a>
+    </section>
+
+    <div class="border-y border-slate-200 bg-white/50 backdrop-blur-sm py-8 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-wrap justify-center gap-8 md:gap-24 text-center">
+            <div class="flex flex-col items-center gap-1">
+                <span class="text-3xl font-black text-slate-900">+15%</span>
+                <span class="text-xs uppercase tracking-widest font-bold text-slate-500">ROI Promedio</span>
+            </div>
+            <div class="flex flex-col items-center gap-1">
+                <span class="text-3xl font-black text-slate-900">100%</span>
+                <span class="text-xs uppercase tracking-widest font-bold text-slate-500">Garantía POUM y CTE</span>
+            </div>
+            <div class="flex flex-col items-center gap-1">
+                <span class="text-3xl font-black text-slate-900">360º</span>
+                <span class="text-xs uppercase tracking-widest font-bold text-slate-500">Gestión Llaves en Mano</span>
+            </div>
+        </div>
+    </div>
+
+    <section class="py-24 md:py-32 max-w-7xl mx-auto px-4 relative z-10">
+        <div class="mb-16 md:mb-24">
+            <h2 class="text-4xl md:text-6xl font-black tracking-tighter text-slate-900">Nuestra Metodología</h2>
+            <p class="text-xl text-slate-600 mt-4 max-w-2xl">Tres pasos quirúrgicos para asegurar que tu inversión sea segura, legal y altamente rentable.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6">
+            
+            <div class="md:col-span-2 bg-white rounded-[2rem] p-10 md:p-12 border border-slate-100 shadow-xl shadow-slate-200/20 group hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-500 transform group-hover:scale-110">
+                    <svg class="w-48 h-48 text-indigo-600" fill="currentColor" viewBox="0 0 24 24"><path d="M3 21v-8l9-7 9 7v8h-6v-5h-6v5H3zm2-2h2v-5h10v5h2v-6.5l-7-5.5-7 5.5V19z"/></svg>
+                </div>
+                <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl font-black mb-8 border border-indigo-100 shadow-sm">1</div>
+                <h3 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">Filtro Urbanístico Implacable</h3>
+                <p class="text-lg text-slate-600 leading-relaxed max-w-xl relative z-10">
+                    No jugamos al azar. Analizamos el <strong>POUM</strong> de tu municipio, la densidad límite del edificio y las normativas locales para garantizar la viabilidad legal desde el minuto cero.
+                </p>
+            </div>
+
+            <div class="md:col-span-1 md:row-span-2 bg-indigo-600 rounded-[2rem] p-10 md:p-12 text-white flex flex-col justify-between group hover:bg-indigo-700 transition-colors duration-300 relative overflow-hidden shadow-2xl shadow-indigo-600/30">
+                <div class="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div>
+                    <div class="w-16 h-16 bg-white/20 backdrop-blur-sm text-white rounded-2xl flex items-center justify-center text-2xl font-black mb-8 border border-white/30">2</div>
+                    <h3 class="text-3xl font-black mb-4 tracking-tight">Auditoría Técnica</h3>
+                    <p class="text-indigo-100 text-lg leading-relaxed font-medium">
+                        Verificación estricta de habitabilidad. Comprobamos la longitud de fachada, salida de humos, alturas libres y cumplimiento del Código Técnico de la Edificación (CTE). Si no se puede hacer bien, no lo hacemos.
+                    </p>
+                </div>
+                <div class="mt-12">
+                    <ul class="space-y-4 text-indigo-100 font-semibold">
+                        <li class="flex items-center gap-3"><svg class="w-6 h-6 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Acústica y Radón</li>
+                        <li class="flex items-center gap-3"><svg class="w-6 h-6 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Cédula de Habitabilidad</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="md:col-span-2 bg-slate-900 rounded-[2rem] p-10 md:p-12 text-white border border-slate-800 shadow-xl relative overflow-hidden group">
+                <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-indigo-500 rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                <div class="w-16 h-16 bg-slate-800 text-white rounded-2xl flex items-center justify-center text-2xl font-black mb-8 border border-slate-700">3</div>
+                <h3 class="text-3xl font-black mb-4 tracking-tight">Ejecución y Proyección de ROI</h3>
+                <p class="text-lg text-slate-400 leading-relaxed max-w-xl">
+                    Creamos un modelado financiero de precisión milimétrica. Controlamos los costes ocultos, gestionamos la obra y te entregamos un activo listo para alquilar o vender, superando los estándares del mercado.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-24 bg-white border-t border-slate-100">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter mb-8">¿Listo para rentabilizar tu espacio?</h2>
+            <a href="evaluador.html" class="inline-flex items-center justify-center gap-3 bg-slate-900 hover:bg-indigo-600 text-white text-xl font-bold py-5 px-10 rounded-full shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+                Evaluar mi local en 2 minutos
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-slate-50 py-12 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-2xl font-black tracking-tighter text-slate-900">
+                9<span class="text-indigo-600">US</span>
+            </div>
+            <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider">
+                &copy; 2026 9US. Inversión Inteligente en Cataluña.
             </p>
-            <div class="mt-8 flex gap-4">
-                <a href="evaluador.html" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1">
-                    Evaluar mi local gratis
-                </a>
-            </div>
         </div>
-        <div class="hidden md:block">
-            <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Arquitectura y planos" class="rounded-2xl shadow-2xl object-cover h-[500px] w-full">
-        </div>
-    </section>
-
-    <section class="bg-white py-20 border-t">
-        <div class="max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-slate-900 mb-12">Nuestra Metodología</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-6 bg-slate-50 rounded-xl border border-gray-100">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-xl font-black mb-4">1</div>
-                    <h3 class="text-xl font-bold mb-2">Filtro Urbanístico</h3>
-                    <p class="text-gray-600 text-sm">Analizamos POUM, densidad del edificio y normativas municipales para garantizar la viabilidad legal desde el minuto cero.</p>
-                </div>
-                <div class="p-6 bg-slate-50 rounded-xl border border-gray-100">
-                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center text-xl font-black mb-4">2</div>
-                    <h3 class="text-xl font-bold mb-2">Auditoría Técnica</h3>
-                    <p class="text-gray-600 text-sm">Verificación estricta de habitabilidad: fachada, humos, alturas y Código Técnico de la Edificación (radón, acústica).</p>
-                </div>
-                <div class="p-6 bg-slate-50 rounded-xl border border-gray-100">
-                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center text-xl font-black mb-4">3</div>
-                    <h3 class="text-xl font-bold mb-2">Ejecución y ROI</h3>
-                    <p class="text-gray-600 text-sm">Modelado financiero preciso. Controlamos los costes ocultos para asegurar que tu inversión supere el 10% de rentabilidad neta.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-slate-900 py-8 text-center text-gray-400 text-sm">
-        <p>&copy; 2026 9US. Todos los derechos reservados. Cataluña, España.</p>
     </footer>
 
 </body>
